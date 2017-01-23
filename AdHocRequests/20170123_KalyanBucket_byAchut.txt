@@ -1,0 +1,785 @@
+/****** Script for SelectTopNRows command from SSMS  ******/
+SELECT TOP 1000 [AlternateKey]
+      ,[BillNumber]
+      ,[RowNumber]
+      ,[BillDate]
+      ,[TillUserName]
+      ,[StoreCode]
+      ,[CounterCode]
+      ,[BilldateTime]
+      ,[IsSync]
+      ,[Barcode]
+      ,[GenericItemYN]
+      ,[TransactionType]
+      ,[OtherTransactionType]
+      ,[ReferenceBillNumber]
+      ,[DivisionID]
+      ,[DivisionCode]
+      ,[GroupCode]
+      ,[GroupName]
+      ,[MakeCategoryCode]
+      ,[MakeCategoryName]
+      ,[MakeCode]
+      ,[MakeName]
+      ,[SectionCode]
+      ,[SectionName]
+      ,[SubSectionCode]
+      ,[SubSectionName]
+      ,[RangeCode]
+      ,[RangeName]
+      ,[RangeFrom]
+      ,[RangeTo]
+      ,[BrandCode]
+      ,[BrandName]
+      ,[DesignCode]
+      ,[DesignName]
+      ,[GrossWeight]
+      ,[DiamondCarat]
+      ,[ColourStoneCarat]
+      ,[StoneWeight]
+      ,[NetWeight]
+      ,[MRP]
+      ,[BoardRate]
+      ,[MetalValue]
+      ,[DiamondValue]
+      ,[ColourStoneValue]
+      ,[StoneValue]
+      ,[MakingChargeUnit]
+      ,[MakingCharge]
+      ,[PromotionCode]
+      ,[PromotionDiscount]
+      ,[PromotionCodeCapillary]
+      ,[PromotionDiscountCapillary]
+      ,[StoneDiscount]
+      ,[OtherDiscount]
+      ,[TotalDiscount]
+      ,[TaxAmount]
+      ,[NetAmount]
+      ,[TotalBillAmount]
+      ,[CardNumber]
+      ,[CustomerCode]
+      ,[CustomerName]
+      ,[Area]
+      ,[District]
+      ,[State]
+      ,[Dob]
+      ,[Pincode]
+      ,[LastTransDate]
+      ,[JoinLocation]
+      ,[JoinDate]
+      ,[aid]
+      ,[cardac]
+      ,[carddesc]
+      ,[BillStore]
+      ,[MobileNumberHash]
+      ,[Address1Hash]
+      ,[Address2Hash]
+      ,[Address3Hash]
+      ,[OfficePhoneNoHash]
+      ,[ResidencePhoneNoHash]
+      ,[FaxNoHash]
+      ,[EmailIDHash]
+      ,[JoinDate_Updated]
+      ,[JoinLocation_Updated]
+      ,[BillStore_State]
+      ,[JoinStore_State]
+      ,[Updated_Store]
+      ,[Update_StoreState]
+      ,[SalesExecutiveCode]
+      ,[SalesExecutiveName]
+  FROM [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+  
+  select * 
+  into #temp2
+  from [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+  where year(BillDate) <=2015
+  
+  
+  select * 
+  into #temp22
+  from [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+  where year(BillDate) <=2016 and CustomerCode in (select distinct CustomerCode
+  from #temp2)
+  
+  ----------------------------------
+  select * into #Deluxe2 FROM 
+(
+
+SELECT distinct(customercode)
+  FROM #temp2
+  where  Netamount between '100000' and '200000' and divisioncode = 'Gold' and sectionname not in ('COIN','LOCKET - COIN')
+  and TransactionType not in ('Sales_Return')
+
+  union
+
+  SELECT distinct customercode
+  FROM #temp2
+  where   Netamount <= 25000  and divisioncode = 'Diamond' 
+  and GroupName not in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS')and sectionname not in ('COIN','LOCKET - COIN')
+  and TransactionType not in ('Sales_Return')
+  
+  union
+
+  
+SELECT distinct customercode
+  FROM #temp2
+  where  Netamount <= 50000  and divisioncode = 'Diamond' 
+  and GroupName in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS')
+  and sectionname not in ('COIN','LOCKET - COIN')
+  and TransactionType not in ('Sales_Return')
+
+  union
+
+  select distinct customercode [NoofCustomers] from (
+SELECT customercode,count(distinct [BillDate]) [FrequencyofVisit]
+FROM #temp2
+where customercode is not null
+group by customercode) as a where  [FrequencyofVisit] in (3,4) ) as a
+------------------------------------------------------------------------------------------------------------------
+---Add customers to table Premium_customers 
+
+select * into #Premium2 FROM 
+(
+
+SELECT distinct customercode
+  FROM #temp2
+  where  Netamount between '200001' and '500000' and divisioncode = 'Gold' and sectionname not in ('COIN','LOCKET - COIN')
+  and TransactionType not in ('Sales_Return')
+
+  union
+
+SELECT distinct customercode
+  FROM #temp2
+  where  Netamount between '25001' and '75001'  and divisioncode = 'Diamond' 
+  and GroupName not in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS')and sectionname not in ('COIN','LOCKET - COIN')
+
+  and TransactionType not in ('Sales_Return')
+  
+  union
+
+SELECT distinct customercode
+  FROM #temp2
+  where  Netamount between '50001' and '150000'  and divisioncode = 'Diamond' 
+  and GroupName in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS') and sectionname not in ('COIN','LOCKET - COIN')
+
+  and TransactionType not in ('Sales_Return')
+
+  union
+
+select distinct customercode [NoofCustomers] from (
+SELECT customercode,count(distinct [BillDate]) [FrequencyofVisit]
+FROM #temp2
+where customercode is not null
+group by customercode) as a where  [FrequencyofVisit] > 4 ) as a
+------------------------------------------------------------------------------------------------------------------
+
+-----Add customers to table Kalyanclub_customers 
+
+
+select * into #KalyanClub2 FROM 
+(
+
+SELECT distinct customercode
+  FROM #temp2
+  where  Netweight > 80  and divisioncode = 'Gold' and sectionname not in ('COIN','LOCKET - COIN')
+  --and makename in ('MUDHRA','NIMAH','SANKALP')
+
+  and TransactionType not in ('Sales_Return')
+  union
+
+SELECT distinct customercode
+  FROM #temp2
+  where  Netamount > '75001'   and divisioncode = 'Diamond' 
+  and GroupName not in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS')and sectionname not in ('COIN','LOCKET - COIN')
+
+  and TransactionType not in ('Sales_Return')
+
+  union
+    select distinct a.customercode from #temp2 as a,
+  (
+  select customercode,YEAR(billdate) as year,SUM(netamount) as netamount
+  from #temp2
+  where divisioncode = 'Diamond' and sectionname not in ('COIN','LOCKET - COIN')
+  and GroupName not in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS')
+  and TransactionType not in ('Sales_Return')
+  group by customercode,YEAR(billdate)
+  having SUM(netamount) > 150000.00
+  ) as b
+  where a.CustomerCode in (b.CustomerCode)
+  union
+
+SELECT distinct customercode
+  FROM #temp2
+  where  Netamount > '150001'  and divisioncode = 'Diamond' 
+  and GroupName in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS') and sectionname not in ('COIN','LOCKET - COIN')
+  and TransactionType not in ('Sales_Return')
+
+union
+    select distinct a.customercode from #temp2 as a,
+  (
+  select customercode,YEAR(billdate) as year,SUM(netamount) as netamount
+  from #temp2
+  where divisioncode = 'Diamond' and sectionname not in ('COIN','LOCKET - COIN')
+  and GroupName in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS')
+  and TransactionType not in ('Sales_Return')
+  group by customercode,YEAR(billdate)
+  having SUM(netamount) > 300000.00
+  ) as b
+  where a.CustomerCode in (b.CustomerCode)
+
+  ) as c
+------------------------------------------------------------------------------------------------------------------
+
+select * into #Basic_Customers2 FROM 
+
+(
+
+select distinct(customercode)
+FROM #temp2
+where customercode is not null and sectionname in ('COIN','LOCKET - COIN') or divisioncode = 'Silver'
+and TransactionType not in ('Sales_Return')
+  
+union
+
+select distinct customercode [NoofCustomers] from (
+SELECT customercode,count(distinct [BillDate]) [FrequencyofVisit]
+FROM #temp2
+where customercode is not null
+group by customercode) as a where  [FrequencyofVisit] <=2 
+) as a
+------------------------------------------------------------------------------------------------------------------
+
+select * into HighestBucket_Customers2 FROM 
+
+( SELECT distinct customercode
+  FROM #temp2
+  where  Netamount > 500000 and divisioncode = 'Gold' and sectionname not in ('COIN','LOCKET - COIN')
+  and TransactionType not in ('Sales_Return')
+
+union 
+
+SELECT distinct customercode
+  FROM #temp2
+  where  Netamount >= 150000 and divisioncode = 'Diamond' and sectionname not in ('COIN','LOCKET - COIN')
+  and TransactionType not in ('Sales_Return')
+ 
+ union
+ 
+ SELECT distinct customercode
+  FROM #temp2
+  where  Netamount > 300000 and divisioncode = 'Diamond' 
+  and GroupName in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS') and sectionname not in ('COIN','LOCKET - COIN')
+
+  and TransactionType not in ('Sales_Return') ) as a
+------------------------------------------------------------------------------------------------------------------
+
+Queries for Store scorcard
+
+  
+  droptable #scoreRFM1
+  
+  select [JoinLocationState],[JoinLocation],avg([RecencyQuintiles])as R
+  ,avg([FrequencyQuintiles]) as F
+  ,avg([MonetaryQuintiles])as M
+  ,avg([RFM_Final_SCORE])as RFM
+  ,count([CustomerCode])as customer
+ into #scoreRFM
+ from [Kalyan_Sales].[dbo].[temp_20160629_CustomerCodeJoinedFromApr14]
+ where Joindate between '2014-04-01' and '2015-12-31' 
+
+ group by [JoinLocation],[JoinLocationState]
+ order by [JoinLocation]
+
+ select * from #scoreRFM
+
+ 
+ drop table #scoremela
+
+  select [JoinLocationState],[JoinLocation],sum([MobileScore])as mobile
+  ,sum([EmailScore]) as email
+  ,sum([ResidencePhoneScore])as phone
+  ,sum([AddressScore])as address
+  ,avg([MelaScore]) as melascore
+  ,count([CustomerCode])as customer
+ into #scoremela
+ from [Kalyan_Sales].[dbo].[temp_20160629_CustomerCodeJoinedFromApr14]
+  where Joindate between '2014-04-01' and '2016-06-30' 
+
+ group by [JoinLocation],[JoinLocationState]
+ order by [JoinLocation]
+
+  select * from #scoremela
+  
+  
+  
+  
+  select distinct a.customercode from #temp2 as a,
+  (
+  select customercode,YEAR(billdate) as year,SUM(netamount) as netamount
+  from #temp2
+  where divisioncode = 'Diamond' and sectionname not in ('COIN','LOCKET - COIN')
+  and GroupName in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS')
+  and TransactionType not in ('Sales_Return')
+  group by customercode,YEAR(billdate)
+  having SUM(netamount) > 300000.00
+  ) as b
+  where a.CustomerCode in (b.CustomerCode)
+
+
+
+select distinct customercode 
+into #cust
+from  #temp2
+
+
+
+alter table #cust
+add bucket2 varchar(20)
+
+update #cust
+set bucket2 = 'Kalyan Club'
+where customercode in (select distinct customercode from #kalyanclub2)
+
+update #cust
+set bucket2 = 'Premium'
+where customercode in (select distinct customercode from #Premium2)
+and bucket2 is null
+
+
+update #cust
+set bucket2 = 'Deluxe'
+where customercode in (select distinct customercode from #Deluxe2)
+and bucket2 is null
+
+update #cust 
+set bucket2 = 'Basic'
+where bucket2 is null
+
+select COUNT(customercode) from #cust
+select COUNT(bucket2) from #cust
+
+select COUNT(*) from #cust
+where bucket is null
+
+select bucket2, COUNT(customercode) from #cust
+group by bucket2
+
+select * 
+into [Kalyan_Temp].[dbo].[temp_sp_Buckets_20170113]
+from #cust
+
+select top 100 * from #cust
+
+alter table #cust
+add gold varchar(5)
+
+update #cust
+set gold = 'KC'
+where customercode in (SELECT distinct customercode
+  FROM #temp
+  where  Netweight > 80  and divisioncode = 'Gold' and sectionname not in ('COIN','LOCKET - COIN')
+  --and makename in ('MUDHRA','NIMAH','SANKALP')
+
+  and TransactionType not in ('Sales_Return'))
+  
+update #cust
+set gold = 'PR'
+where customercode in (SELECT distinct customercode
+  FROM #temp
+  where  Netamount between '200001' and '500000' and divisioncode = 'Gold' and sectionname not in ('COIN','LOCKET - COIN')
+  and TransactionType not in ('Sales_Return'))
+  and gold is null
+  
+  update #cust
+set gold = 'DE'
+where customercode in (SELECT distinct(customercode)
+  FROM #temp
+  where  Netamount between '100000' and '200000' and divisioncode = 'Gold' and sectionname not in ('COIN','LOCKET - COIN')
+  and TransactionType not in ('Sales_Return'))
+  and gold is null
+  
+    update #cust
+set gold = 'BA'
+where customercode in (SELECT distinct(customercode)
+  FROM #temp
+  where  Netamount < '100000' and divisioncode = 'Gold' and sectionname not in ('COIN','LOCKET - COIN')
+  and TransactionType not in ('Sales_Return'))
+  and gold is null
+  
+  
+  alter table #cust
+  add diamond varchar(5)
+  
+  select top 100 * from #cust
+  
+  update #cust
+  set diamond='KC'
+  where customercode in (SELECT distinct customercode
+  FROM #temp
+  where  Netamount > '75001'   and divisioncode = 'Diamond' 
+  and GroupName not in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS')and sectionname not in ('COIN','LOCKET - COIN')
+
+  and TransactionType not in ('Sales_Return')
+
+  union
+    select distinct a.customercode from #temp as a,
+  (
+  select customercode,YEAR(billdate) as year,SUM(netamount) as netamount
+  from #temp
+  where divisioncode = 'Diamond' and sectionname not in ('COIN','LOCKET - COIN')
+  and GroupName not in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS')
+  and TransactionType not in ('Sales_Return')
+  group by customercode,YEAR(billdate)
+  having SUM(netamount) > 150000.00
+  ) as b
+  where a.CustomerCode in (b.CustomerCode))
+  
+    update #cust
+  set diamond='PR'
+  where customercode in (SELECT distinct customercode
+  FROM #temp
+  where  Netamount between '25001' and '75001'  and divisioncode = 'Diamond' 
+  and GroupName not in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS')and sectionname not in ('COIN','LOCKET - COIN')
+
+  and TransactionType not in ('Sales_Return'))
+  and diamond is null
+  
+  
+      update #cust
+  set diamond='DE'
+  where customercode in (  SELECT distinct customercode
+  FROM #temp
+  where   Netamount <= 25000  and divisioncode = 'Diamond' 
+  and GroupName not in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS')and sectionname not in ('COIN','LOCKET - COIN')
+  and TransactionType not in ('Sales_Return'))
+  and diamond is null
+  
+  select top 100 * from #cust
+  
+  alter table #cust
+  add uncut varchar(5)
+  
+  update #cust
+  set uncut = 'KC'
+  where customercode in (SELECT distinct customercode
+  FROM #temp
+  where  Netamount > '150001'  and divisioncode = 'Diamond' 
+  and GroupName in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS') and sectionname not in ('COIN','LOCKET - COIN')
+  and TransactionType not in ('Sales_Return')
+
+union
+    select distinct a.customercode from #temp as a,
+  (
+  select customercode,YEAR(billdate) as year,SUM(netamount) as netamount
+  from #temp
+  where divisioncode = 'Diamond' and sectionname not in ('COIN','LOCKET - COIN')
+  and GroupName in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS')
+  and TransactionType not in ('Sales_Return')
+  group by customercode,YEAR(billdate)
+  having SUM(netamount) > 300000.00
+  ) as b
+  where a.CustomerCode in (b.CustomerCode))
+  
+    update #cust
+  set uncut = 'PR'
+  where customercode in (SELECT distinct customercode
+  FROM #temp
+  where  Netamount between '50001' and '150000'  and divisioncode = 'Diamond' 
+  and GroupName in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS') and sectionname not in ('COIN','LOCKET - COIN')
+
+  and TransactionType not in ('Sales_Return'))
+  and uncut is null
+  
+  
+  update #cust
+  set uncut = 'DE'
+  where customercode in (SELECT distinct customercode
+  FROM #temp
+  where  Netamount <= 50000  and divisioncode = 'Diamond' 
+  and GroupName in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS')
+  and sectionname not in ('COIN','LOCKET - COIN')
+  and TransactionType not in ('Sales_Return'))
+  and uncut is null
+
+alter table #cust
+add visit varchar(5)
+
+update #cust
+set visit = 'PR'
+where customercode in (select distinct customercode [NoofCustomers] from (
+SELECT customercode,count(distinct [BillDate]) [FrequencyofVisit]
+FROM #temp
+where customercode is not null
+group by customercode) as a where  [FrequencyofVisit] > 4 )
+
+update #cust
+set visit = 'DE'
+where customercode in (  select distinct customercode [NoofCustomers] from (
+SELECT customercode,count(distinct [BillDate]) [FrequencyofVisit]
+FROM #temp
+where customercode is not null
+group by customercode) as a where  [FrequencyofVisit] in (3,4))
+and visit is null 
+
+update #cust
+set visit = 'BA'
+where customercode in (select distinct customercode [NoofCustomers] from (
+SELECT customercode,count(distinct [BillDate]) [FrequencyofVisit]
+FROM #temp
+where customercode is not null
+group by customercode) as a where  [FrequencyofVisit] <=2)
+and visit is null
+ 
+select top 100 * from #cust
+
+select distinct gold from #cust
+
+select * 
+into [Kalyan_Temp].[dbo].[temp_sp_Buckets_20170113_2]
+from #cust
+
+
+select top 100 * from #cust
+
+-------------------------------------------------------------------------------  
+ alter table #cust
+add gold2 varchar(5)
+
+----ALTER TABLE #cust DROP COLUMN gold2
+ 
+ 
+ update #cust
+set gold2 = 'KC'
+where customercode in (SELECT distinct customercode
+  FROM #temp2
+  where  Netweight > 80  and divisioncode = 'Gold' and sectionname not in ('COIN','LOCKET - COIN')
+  --and makename in ('MUDHRA','NIMAH','SANKALP')
+
+  and TransactionType not in ('Sales_Return'))
+  
+update #cust
+set gold2 = 'PR'
+where customercode in (SELECT distinct customercode
+  FROM #temp2
+  where  Netamount between '200001' and '500000' and divisioncode = 'Gold' and sectionname not in ('COIN','LOCKET - COIN')
+  and TransactionType not in ('Sales_Return'))
+  and gold2 is null
+  
+  update #cust
+set gold2 = 'DE'
+where customercode in (SELECT distinct(customercode)
+  FROM #temp2
+  where  Netamount between '100000' and '200000' and divisioncode = 'Gold' and sectionname not in ('COIN','LOCKET - COIN')
+  and TransactionType not in ('Sales_Return'))
+  and gold2 is null
+  
+    update #cust
+set gold2 = 'BA'
+where customercode in (SELECT distinct(customercode)
+  FROM #temp2
+  where  Netamount < '100000' and divisioncode = 'Gold' and sectionname not in ('COIN','LOCKET - COIN')
+  and TransactionType not in ('Sales_Return'))
+  and gold2 is null
+  
+  
+  alter table #cust
+  add diamond2 varchar(5)
+  
+  select top 100 * from #cust
+  
+  update #cust
+  set diamond2='KC'
+  where customercode in (SELECT distinct customercode
+  FROM #temp2
+  where  Netamount > '75001'   and divisioncode = 'Diamond' 
+  and GroupName not in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS')and sectionname not in ('COIN','LOCKET - COIN')
+
+  and TransactionType not in ('Sales_Return')
+
+  union
+    select distinct a.customercode from #temp2 as a,
+  (
+  select customercode,YEAR(billdate) as year,SUM(netamount) as netamount
+  from #temp2
+  where divisioncode = 'Diamond' and sectionname not in ('COIN','LOCKET - COIN')
+  and GroupName not in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS')
+  and TransactionType not in ('Sales_Return')
+  group by customercode,YEAR(billdate)
+  having SUM(netamount) > 150000.00
+  ) as b
+  where a.CustomerCode in (b.CustomerCode))
+  
+    update #cust
+  set diamond2='PR'
+  where customercode in (SELECT distinct customercode
+  FROM #temp2
+  where  Netamount between '25001' and '75001'  and divisioncode = 'Diamond' 
+  and GroupName not in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS')and sectionname not in ('COIN','LOCKET - COIN')
+
+  and TransactionType not in ('Sales_Return'))
+  and diamond2 is null
+  
+  
+      update #cust
+  set diamond2='DE'
+  where customercode in (  SELECT distinct customercode
+  FROM #temp2
+  where   Netamount <= 25000  and divisioncode = 'Diamond' 
+  and GroupName not in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS')and sectionname not in ('COIN','LOCKET - COIN')
+  and TransactionType not in ('Sales_Return'))
+  and diamond2 is null
+  
+  select top 100 * from #cust
+  
+  select distinct diamond2 from #cust
+  
+  alter table #cust
+  add uncut2 varchar(5)
+  
+  update #cust
+  set uncut2 = 'KC'
+  where customercode in (SELECT distinct customercode
+  FROM #temp2
+  where  Netamount > '150001'  and divisioncode = 'Diamond' 
+  and GroupName in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS') and sectionname not in ('COIN','LOCKET - COIN')
+  and TransactionType not in ('Sales_Return')
+
+union
+    select distinct a.customercode from #temp2 as a,
+  (
+  select customercode,YEAR(billdate) as year,SUM(netamount) as netamount
+  from #temp2
+  where divisioncode = 'Diamond' and sectionname not in ('COIN','LOCKET - COIN')
+  and GroupName in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS')
+  and TransactionType not in ('Sales_Return')
+  group by customercode,YEAR(billdate)
+  having SUM(netamount) > 300000.00
+  ) as b
+  where a.CustomerCode in (b.CustomerCode))
+  
+    update #cust
+  set uncut2 = 'PR'
+  where customercode in (SELECT distinct customercode
+  FROM #temp2
+  where  Netamount between '50001' and '150000'  and divisioncode = 'Diamond' 
+  and GroupName in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS') and sectionname not in ('COIN','LOCKET - COIN')
+
+  and TransactionType not in ('Sales_Return'))
+  and uncut2 is null
+  
+  
+  update #cust
+  set uncut2 = 'DE'
+  where customercode in (SELECT distinct customercode
+  FROM #temp2
+  where  Netamount <= 50000  and divisioncode = 'Diamond' 
+  and GroupName in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS')
+  and sectionname not in ('COIN','LOCKET - COIN')
+  and TransactionType not in ('Sales_Return'))
+  and uncut2 is null
+
+alter table #cust
+add visit2 varchar(5)
+
+update #cust
+set visit2 = 'PR'
+where customercode in (select distinct customercode [NoofCustomers] from (
+SELECT customercode,count(distinct [BillDate]) [FrequencyofVisit]
+FROM #temp2
+where customercode is not null
+group by customercode) as a where  [FrequencyofVisit] > 4 )
+
+update #cust
+set visit2 = 'DE'
+where customercode in (  select distinct customercode [NoofCustomers] from (
+SELECT customercode,count(distinct [BillDate]) [FrequencyofVisit]
+FROM #temp2
+where customercode is not null
+group by customercode) as a where  [FrequencyofVisit] in (3,4))
+and visit2 is null 
+
+update #cust
+set visit2 = 'BA'
+where customercode in (select distinct customercode [NoofCustomers] from (
+SELECT customercode,count(distinct [BillDate]) [FrequencyofVisit]
+FROM #temp2
+where customercode is not null
+group by customercode) as a where  [FrequencyofVisit] <=2)
+and visit2 is null
+ 
+select top 100 * from #cust
+
+select distinct uncut2 from #cust
+
+select * 
+into [Kalyan_Temp].[dbo].[temp_sp_Buckets_20170113_2]
+from #cust
+
+
+select top 100 * from #cust
+
+select bucket,COUNT(gold) from #cust
+where gold = 'KC'
+group by bucket
+
+select COUNT(distinct customercode) from #cust
+
+select count(distinct CustomerCode) from  [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+ 
+  select count(distinct CustomerCode) from  [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+  where year(BillDate)<=2015
+  
+  select bucket,COUNT(gold) from #cust
+  --where gold is null 
+  group by bucket
+    select bucket,COUNT(gold) from #cust
+  where gold='DE'
+  group by bucket
+    select bucket,COUNT(gold) from #cust
+  where gold='PR'
+  group by bucket
+   select bucket,COUNT(gold) from #cust
+  where gold='BA'
+  group by bucket
+  
+  
+  
+    select bucket,uncut,COUNT(uncut) from #cust
+  --where gold is null 
+  group by bucket,uncut
+  
+      select bucket,visit,COUNT(visit) from #cust
+  --where gold is null 
+  group by bucket,visit
+  
+      select bucket,diamond,COUNT(diamond) from #cust
+  --where gold is null 
+  group by bucket,diamond
+  
+  select bucket,gold,COUNT(gold) from #cust
+  group by bucket,gold
+  
+update #cust
+set visit='NU'
+where visit is null
+update #cust
+set diamond='NU'
+where diamond is null
+update #cust
+set gold='NU'
+where gold is null
+update #cust
+set uncut='NU'
+where uncut is null
+update #cust
+set visit2='NU'
+where visit2 is null
+update #cust
+set diamond2='NU'
+where diamond2 is null
+update #cust
+set gold2='NU'
+where gold2 is null
+update #cust
+set uncut2='NU'
+where uncut2 is null
