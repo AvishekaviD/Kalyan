@@ -1,0 +1,261 @@
+Gold - More than or equal to 100000 but less than 200000
+
+SELECT count(distinct customercode)
+  FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+  where  Netamount between '100000' and '200000' and divisioncode = 'Gold' and sectionname not in ('COIN','LOCKET - COIN')
+  and TransactionType not in ('Sales_Return')
+
+
+Gold - More than or equal to 200000 but less than 500000
+
+SELECT count(distinct customercode)
+  FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+  where  Netamount between '200001' and '500000' and divisioncode = 'Gold' and sectionname not in ('COIN','LOCKET - COIN')
+  and TransactionType not in ('Sales_Return')
+
+
+Gold - Brand Item Purchase Weight > 80 Grams
+
+
+
+ - Mudra, Nimah, Sankalp
+
+SELECT count(distinct customercode)
+  FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+  where  Netweight > 80  and divisioncode = 'Gold' and sectionname not in ('COIN','LOCKET - COIN')
+  and makename in ('MUDHRA','NIMAH','SANKALP')
+
+  and TransactionType not in ('Sales_Return')
+
+Gold - More than 500000
+
+SELECT count(distinct customercode)
+  FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+  where  Netamount > 500000 and divisioncode = 'Gold' and sectionname not in ('COIN','LOCKET - COIN')
+  and TransactionType not in ('Sales_Return')
+  
+
+Diamond - Upto or equal to 25000 in a single purchase
+
+SELECT count(distinct customercode)
+  FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+  where   Netamount <= 25000  and divisioncode = 'Diamond' 
+  and GroupName not in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS')and sectionname not in ('COIN','LOCKET - COIN')
+
+  and TransactionType not in ('Sales_Return')
+  
+
+Diamond - More than 25000 but less than 75000 in a single purchase
+
+SELECT count(distinct customercode)
+  FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+  where   Netamount between '25001' and '75000'  and divisioncode = 'Diamond' 
+  and GroupName not in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS')and sectionname not in ('COIN','LOCKET - COIN')
+
+  and TransactionType not in ('Sales_Return')
+  
+Diamond - "More than 75000 but less than 150000 in a single purchase
+[OR]
+More than 150000 purchase value in a year"
+
+SELECT count(distinct customercode)
+  FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+  where  Netamount between '75001' and '150000'  and divisioncode = 'Diamond' 
+  and GroupName not in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS')and sectionname not in ('COIN','LOCKET - COIN')
+
+  and TransactionType not in ('Sales_Return')
+
+Diamond - More than 150000 in a single purchase 
+
+SELECT count(distinct customercode)
+  FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+  where  Netamount >= 150000 and divisioncode = 'Diamond' and sectionname not in ('COIN','LOCKET - COIN')
+  and TransactionType not in ('Sales_Return')
+  
+
+Uncut - Upto or equal to 50000 in a single purchase
+
+
+SELECT count(distinct customercode)
+  FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+  where  Netamount <= 50000  and divisioncode = 'Diamond' 
+  and GroupName in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS') and sectionname not in ('COIN','LOCKET - COIN')
+
+  and TransactionType not in ('Sales_Return')
+
+
+Uncut - More than 50000 but less than 150000 in a single purchase
+
+
+SELECT count(distinct customercode)
+  FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+  where  Netamount between '50001' and '150000'  and divisioncode = 'Diamond' 
+  and GroupName in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS') and sectionname not in ('COIN','LOCKET - COIN')
+
+  and TransactionType not in ('Sales_Return')
+  
+  
+
+Uncut - More than 150000 but less than 300000 in a single purchase
+
+SELECT count(distinct customercode)
+  FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+  where  Netamount between '150001' and '300000'  and divisioncode = 'Diamond' 
+  and GroupName in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS') and sectionname not in ('COIN','LOCKET - COIN')
+
+  and TransactionType not in ('Sales_Return')
+
+
+Uncut - More than 300000 in a single purchase
+
+SELECT count(distinct customercode)
+  FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+  where  Netamount > 300000 and divisioncode = 'Diamond' 
+  and GroupName in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS') and sectionname not in ('COIN','LOCKET - COIN')
+
+  and TransactionType not in ('Sales_Return')
+  
+
+Less than or equal to 2 visits
+
+select count(distinct customercode)[NoofCustomers] from (
+SELECT customercode,count(distinct [BillDate]) [FrequencyofVisit]
+FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+where customercode is not null
+group by customercode) as a where  [FrequencyofVisit] <=2 
+
+More than 2 visits but less than or equal to 4 visits
+
+select count(distinct customercode)[NoofCustomers] from (
+SELECT customercode,count(distinct [BillDate]) [FrequencyofVisit]
+FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+where customercode is not null
+group by customercode) as a where  [FrequencyofVisit] in ('3','4')
+
+More than 4 visits
+
+select count(distinct customercode)[NoofCustomers] from (
+SELECT customercode,count(distinct [BillDate]) [FrequencyofVisit]
+FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+where customercode is not null
+group by customercode) as a where  [FrequencyofVisit] > 4
+
+Coin & Silver purchases
+
+select count(distinct(customercode))
+FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+where customercode is not null and sectionname in ('COIN','LOCKET - COIN') or divisioncode = 'Silver'
+and TransactionType not in ('Sales_Return')
+
+Deluxe - 123 Customers visiting 3 to 4 times & buying gold between 100000 to 200000 & and buying diamond upto 25000
+
+SELECT count(distinct customercode)
+FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+where   Netamount <= 25000  and divisioncode = 'Diamond' 
+and GroupName not in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS')and sectionname not in ('COIN','LOCKET - COIN')
+and TransactionType not in ('Sales_Return')
+ and customercode in (
+SELECT  customercode
+FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+where  Netamount between '100000' and '200000' and divisioncode = 'Gold' and sectionname not in ('COIN','LOCKET - COIN')
+and TransactionType not in ('Sales_Return') and customercode in (
+  
+select customercode from (
+SELECT customercode,count(distinct [BillDate]) [FrequencyofVisit]
+FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+where customercode is not null
+group by customercode) as a where  [FrequencyofVisit] in ('3','4')))
+
+
+Premium -123
+
+SELECT count(distinct customercode)
+  FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+  where   Netamount between '25001' and '75000'  and divisioncode = 'Diamond' 
+  and GroupName not in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS')and sectionname not in ('COIN','LOCKET - COIN')
+  and TransactionType not in ('Sales_Return')
+  and customercode in (
+
+SELECT customercode - 123
+  FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+  where  Netamount between '200001' and '500000' and divisioncode = 'Gold' and sectionname not in ('COIN','LOCKET - COIN')
+  and TransactionType not in ('Sales_Return')
+ and customercode in (
+  
+select customercode from (
+SELECT customercode,count(distinct [BillDate]) [FrequencyofVisit]
+FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+where customercode is not null
+group by customercode) as a where  [FrequencyofVisit] > 4))
+
+Kalyan Club - 13
+
+  SELECT count(distinct customercode)
+  FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+  where  Netweight > 80  and divisioncode = 'Gold' and sectionname not in ('COIN','LOCKET - COIN')
+  and makename in ('MUDHRA','NIMAH','SANKALP')
+
+  and TransactionType not in ('Sales_Return')
+  and customercode in (
+
+SELECT  customercode FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+  where  Netamount between '75001' and '150000'  and divisioncode = 'Diamond' 
+  and GroupName not in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS')and sectionname not in ('COIN','LOCKET - COIN')and TransactionType not in ('Sales_Return'))
+
+
+Deluxe 124
+
+SELECT count(distinct customercode)
+  FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+  where  Netamount <= 50000  and divisioncode = 'Diamond' 
+  and GroupName in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS') and sectionname not in ('COIN','LOCKET - COIN')
+and TransactionType not in ('Sales_Return')
+ and customercode in (
+
+SELECT  customercode
+FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+where  Netamount between '100000' and '200000' and divisioncode = 'Gold' and sectionname not in ('COIN','LOCKET - COIN')
+and TransactionType not in ('Sales_Return') and customercode in (
+  
+select customercode from (
+SELECT customercode,count(distinct [BillDate]) [FrequencyofVisit]
+FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+where customercode is not null
+group by customercode) as a where  [FrequencyofVisit] in ('3','4')))
+
+
+Premium -124
+
+
+SELECT count(distinct customercode)
+  FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+  where  Netamount between '50001' and '150000'  and divisioncode = 'Diamond' 
+  and GroupName in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS') and sectionname not in ('COIN','LOCKET - COIN')
+ and TransactionType not in ('Sales_Return')
+  and customercode in (
+
+SELECT customercode
+  FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+  where  Netamount between '200001' and '500000' and divisioncode = 'Gold' and sectionname not in ('COIN','LOCKET - COIN')
+  and TransactionType not in ('Sales_Return')
+ and customercode in (
+  
+select customercode from (
+SELECT customercode,count(distinct [BillDate]) [FrequencyofVisit]
+FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+where customercode is not null
+group by customercode) as a where  [FrequencyofVisit] > 4))
+
+Kalyan club - 124
+
+  SELECT count(distinct customercode)
+  FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+  where  Netweight > 80  and divisioncode = 'Gold' and sectionname not in ('COIN','LOCKET - COIN')
+  and makename in ('MUDHRA','NIMAH','SANKALP')
+
+  and TransactionType not in ('Sales_Return')
+  and customercode in (
+
+SELECT  customercode FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+  where  Netamount between '75001' and '150000'  and divisioncode = 'Diamond' 
+  and GroupName not in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS')and sectionname not in ('COIN','LOCKET - COIN')and TransactionType not in ('Sales_Return')) 

@@ -1,0 +1,94 @@
+
+//***After 2014-04-01**//
+
+select billnumber, count(distinct customercode) count, count(OtherTransactionType) TT_count
+FROM [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+where othertransactiontype = 'general' and joindate > '2014-04-01'
+group by billnumber
+having count(distinct customercode) > 1
+order by count(OtherTransactionType) desc
+
+
+select billnumber, count(distinct customercode) count, count(othertransactiontype) TT_count
+FROM [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+where OtherTransactionType = 'SALE_ORDER_ADVANCE' and joindate > '2014-04-01'
+group by billnumber
+having count(distinct customercode) > 1
+order by count(OtherTransactionType) desc
+
+select billnumber, count(distinct customercode) count, count(othertransactiontype) TT_count
+FROM [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+where OtherTransactionType = 'promotion' and joindate > '2014-04-01'
+group by billnumber
+having count(distinct customercode) > 1
+order by count(OtherTransactionType) desc
+
+select billnumber, count(distinct customercode) count, count(othertransactiontype) TT_count
+FROM [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+where OtherTransactionType = 'GPA' and joindate > '2014-04-01'
+group by billnumber
+having count(distinct customercode) > 1
+order by count(OtherTransactionType) desc
+
+
+
+
+//***Before 2014-04-01**//
+select billnumber, count(distinct customercode) count
+FROM [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+where joindate < '2014-04-01'
+group by billnumber
+having count(distinct customercode) > 1
+
+//***Overall**//
+select billnumber, count(distinct customercode) count, count(OtherTransactionType) TT_count
+FROM [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+where othertransactiontype = 'general'
+group by billnumber
+having count(distinct customercode) > 1
+order by count(OtherTransactionType) desc
+
+
+select billnumber, count(distinct customercode) count, count(othertransactiontype) TT_count
+FROM [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+where OtherTransactionType = 'SALE_ORDER_ADVANCE'
+group by billnumber
+having count(distinct customercode) > 1
+order by count(OtherTransactionType) desc
+
+select billnumber, count(distinct customercode) count, count(othertransactiontype) TT_count
+FROM [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+where OtherTransactionType = 'promotion'
+group by billnumber
+having count(distinct customercode) > 1
+order by count(OtherTransactionType) desc
+
+select billnumber, count(distinct customercode) count, count(othertransactiontype) TT_count
+FROM [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+where OtherTransactionType = 'GPA'
+group by billnumber
+having count(distinct customercode) > 1
+order by count(OtherTransactionType) desc
+
+
+select billnumber, count(distinct customercode) count, count(othertransactiontype) TT_count
+FROM [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+where OtherTransactionType = 'OLD_GOLD_PURCHASE'
+group by billnumber
+having count(distinct customercode) > 1
+order by count(OtherTransactionType) desc
+
+
+--Customers transacting in more than one store in a single day--
+
+SELECT [BillDate],[CustomerCode],count(distinct [BillStore])    
+FROM [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+group by [BillDate],[CustomerCode]
+having count(distinct [BillStore])>1
+order by count(distinct [BillStore]) desc
+
+
+
+
+
+
