@@ -200,7 +200,9 @@ Kalyan Club - 13
 
 SELECT  customercode FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
   where  Netamount between '75001' and '150000'  and divisioncode = 'Diamond' 
-  and GroupName not in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS')and sectionname not in ('COIN','LOCKET - COIN')and TransactionType not in ('Sales_Return'))
+  and GroupName not in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND 
+WITH COLOUR STONE ORNAMENTS')and sectionname not in ('COIN','LOCKET - COIN')
+and TransactionType not in ('Sales_Return'))
 
 
 Deluxe 124
@@ -208,7 +210,8 @@ Deluxe 124
 SELECT count(distinct customercode)
   FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
   where  Netamount <= 50000  and divisioncode = 'Diamond' 
-  and GroupName in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS') and sectionname not in ('COIN','LOCKET - COIN')
+  and GroupName in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH 
+COLOUR STONE ORNAMENTS') and sectionname not in ('COIN','LOCKET - COIN')
 and TransactionType not in ('Sales_Return')
  and customercode in (
 
@@ -230,7 +233,8 @@ Premium -124
 SELECT count(distinct customercode)
   FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
   where  Netamount between '50001' and '150000'  and divisioncode = 'Diamond' 
-  and GroupName in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS') and sectionname not in ('COIN','LOCKET - COIN')
+  and GroupName in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH 
+COLOUR STONE ORNAMENTS') and sectionname not in ('COIN','LOCKET - COIN')
  and TransactionType not in ('Sales_Return')
   and customercode in (
 
@@ -258,4 +262,6 @@ Kalyan club - 124
 
 SELECT  customercode FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
   where  Netamount between '75001' and '150000'  and divisioncode = 'Diamond' 
-  and GroupName not in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS')and sectionname not in ('COIN','LOCKET - COIN')and TransactionType not in ('Sales_Return')) 
+  and GroupName not in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND 
+WITH COLOUR STONE ORNAMENTS')and sectionname not in ('COIN','LOCKET - COIN')
+and TransactionType not in ('Sales_Return')) 
