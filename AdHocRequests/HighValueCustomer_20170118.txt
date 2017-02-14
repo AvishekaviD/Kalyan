@@ -1,0 +1,100 @@
+  
+ ----- high value customer with billnumber(single transaction)
+
+  select distinct a.*,b.billnumber
+  into #temp2
+  from [Kalyan_Temp].[dbo].[temp_sp_highvalueSingle] as a
+  left join [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo] as b
+  on a.customercode=b.CustomerCode 
+  and a.billdate = b.BillDate
+  and a.billstore=b.BillStore
+  and a.divisioncode=b.DivisionCode
+  and a.groupname=b.GroupName
+  and a.makecategoryname=b.MakeCategoryName
+  and a.makename=b.MakeName
+  and a.sectionname=b.SectionName
+  and a.subsectionname = b.SubSectionName
+  and a.netamount=b.NetAmount
+  
+  select * from #temp2
+
+-----high value customer with billnumber (multiple transaction)
+
+
+  select distinct a.*,b.billnumber
+  into #temp2
+  from [Kalyan_Temp].[dbo].[temp_sp_highvalueSum] as a
+  left join [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo] as b
+  on a.customercode=b.CustomerCode 
+  and a.billdate = b.BillDate
+  and a.billstore=b.BillStore
+  and a.divisioncode=b.DivisionCode
+  and a.groupname=b.GroupName
+  and a.makecategoryname=b.MakeCategoryName
+  and a.makename=b.MakeName
+  and a.sectionname=b.SectionName
+  and a.subsectionname = b.SubSectionName
+  
+  select * from #temp2
+  
+
+-----repeat customer with metal diamond value
+
+  select customercode,sum(cast (metalvalue as float)),SUM(cast (diamondvalue as float)) 
+  from [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+  where CustomerCode in (select distinct CustomerCode
+  from [Kalyan_Temp].[dbo].[temp_sp_repeatcustomer]) and [TransactionType] <> 'SALES_RETURN' and divisioncode in ('GOLD','DIAMOND')
+  group by CustomerCode
+
+
+------repeat customers with values
+
+
+select * 
+into #temp
+
+from [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+
+where CustomerCode in (
+	select distinct CustomerCode 
+from [Kalyan_Temp].[dbo].[temp_sp_repeatcustomer]
+)
+
+
+
+
+select customercode , SUM(cast(diamondvalue as float)) as diamond 
+from #temp 
+where transactiontype <> 'SALES_RETURN'
+and divisioncode='diamond'
+
+group by customercode 
+
+----having SUM(cast(diamondvalue as float))>0
+
+
+
+
+select customercode , SUM(cast(metalvalue as float)) as diamond 
+from #temp
+
+where transactiontype <> 'SALES_RETURN'
+and divisioncode='GOLD'
+
+group by customercode
+
+----having SUM(cast(metalvalue as float))>0
+
+
+
+select customercode , SUM(cast(netamount as float)) as diamond 
+from #temp
+
+where transactiontype <> 'SALES_RETURN'
+and divisioncode='SILVER'
+
+group by customercode
+
+----having SUM(cast(netamount as float))>0
+
+------------------------
