@@ -1,0 +1,19 @@
+    select [BillStore_State],datename(month,billdate),SUM(cast(MetalValue as float)) as metalvalue,SUM(CAST(netamount as float)) as netamount,
+  SUM(CAST(diamondvalue as float)) as DiamondValue, SUM(CAST(netweight as float)) as NetWeight
+  from [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+  where BillDate between '2016-01-21 00:00:00' and '2017-01-21 00:00:00'
+  group by [BillStore_State],datename(month,billdate)
+  
+  
+    select [BillStore_State],datename(week,billdate),SUM(cast(MetalValue as float)) as metalvalue,SUM(CAST(netamount as float)) as netamount,
+  SUM(CAST(diamondvalue as float)) as DiamondValue, SUM(CAST(netweight as float)) as NetWeight
+  from [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+   where BillDate between '2016-12-21 00:00:00' and '2017-01-21 00:00:00'
+  group by [BillStore_State],datename(week,billdate)
+  
+    select [BillStore],datename(DY,billdate),SUM(cast(MetalValue as float)) as metalvalue,SUM(CAST(netamount as float)) as netamount,
+  SUM(CAST(diamondvalue as float)) as DiamondValue, SUM(CAST(netweight as float)) as NetWeight
+  from [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+   where BillDate between '2017-01-15 00:00:00' and '2017-01-21 00:00:00'
+  group by [BillStore],datename(DY,billdate)
+  
