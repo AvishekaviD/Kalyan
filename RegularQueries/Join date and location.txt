@@ -1,0 +1,175 @@
+select customercode,COUNT(distinct JoinDate_Updated)as joindate
+  ---into #tdate 
+  from [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+  --where BillDate < '2016-12-31 00:00:00'
+  group by CustomerCode
+  having COUNT(distinct JoinDate_Updated)<>1
+  
+  select customercode , MIN(billdate) minbildate,
+  MIN(joindate) minjoindate,MIN(joindate_updated) minjoinupdate
+  from [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+  where CustomerCode in (select CustomerCode from #tdate)
+  group by CustomerCode
+  having MIN(billdate)<MIN(JoinDate_Updated)
+  
+  drop table #minjoindate
+  
+  select customercode,MIN(JoinDate_Updated) joindate
+  into #minjoindate
+  from [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+  where CustomerCode in (select CustomerCode from #tdate)
+  group by customercode
+  
+  select * from #minjoindate
+  
+update [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+set joinlocation_updated= JoinLocation
+from [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo] as a
+inner join #minjoindate as b
+on a.CustomerCode=b.CustomerCode
+
+select distinct customercode,joinlocation,joinlocation_updated
+into #t
+from [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+where CustomerCode in (select customercode from #minjoindate)
+
+select customercode,COUNT(distinct joinlocation_updated) cnt
+into #t
+from [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+group by customercode
+having COUNT(distinct joinlocation_updated)<>1
+
+select customercode,min(billdate) bd,min(joindate_updated) jdu,MIN(BilldateTime) bdt 
+into #time
+from [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+where CustomerCode in (select CustomerCode from #t)
+group by customercode
+
+select a.*,b.billstore bdbs
+into #tempbdbs
+from #time as a
+left join [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo] as b
+on a.customercode=b.CustomerCode and a.bd=b.BillDate
+
+
+select customercode,bdbs 
+into #joinlocation
+from  #tempbdbs
+where customercode not in (select distinct customercode from #temp)
+
+select customercode,COUNT(distinct bdbs) cnt
+--into #temp
+from #joinlocation
+group by customercode
+having COUNT(distinct bdbs)<>1
+
+select * from #tempbdbs
+where customercode in (select customercode from #temp)
+order by customercode
+
+
+select customercode,MIN(alternatekey) alternate
+into #alternate
+from [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+where CustomerCode in (select distinct CustomerCode from #temp)
+group by customercode
+  
+  select * from #alternate
+  
+  select distinct a.*,b.billstore altstore
+  into #altstore
+  from #alternate as a
+  left join [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo] as b
+  on a.customercode=b.CustomerCode and a.alternate=b.AlternateKey
+  
+  
+  select customercode,COUNT(distinct altstore) 
+  from #altstore
+  group by customercode
+  having COUNT(distinct altstore) <>1
+  
+  insert into  #joinlocation
+  select customercode,altstore
+  from #altstore
+  
+  select COUNT(customercode) from #joinlocation
+  
+  select top 100 * 
+ from #joinupdate
+  from  #joinlocation
+  
+  
+  
+  
+  update [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+set joinlocation_updated= b.bdbs
+from [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo] as a
+inner join #joinupdate as b
+on a.CustomerCode=b.CustomerCode
+  
+  select customercode,COUNT(distinct JoinDate_Updated)
+  from [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+  group by CustomerCode
+  having COUNT(distinct JoinDate_Updated)<>1
+  
+  
+  select * 
+  into [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo_20170119_bk]
+  from [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+  
+  select joinlocation_updated, YEAR(joindate_updated),COUNT(distinct customercode)
+  from [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+  where YEAR(JoinDate_Updated) between 2012 and 2016
+  group by joinlocation_updated ,YEAR (JoinDate_Updated)
+  
+  
+    select joinlocation_updated, YEAR(joindate_updated),year(billdate),COUNT(distinct customercode)
+  from [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+  where YEAR(JoinDate_Updated) between 2012 and 2016 
+  group by joinlocation_updated ,YEAR (JoinDate_Updated),year(billdate)
+  
+  
+  select distinct(customercode)
+  ---  into #temp2
+  from [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+
+  where JoinLocation_Updated is null
+  
+  select customercode,MIN(alternatekey) alternate
+  into #alternate2
+  from [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+  where CustomerCode in (select CustomerCode from #temp2)
+  group by CustomerCode
+  
+  
+  select * from #alternate2
+  where  alternate is null
+  
+  select a.*,b.billstore as billstore
+  into #joinup2
+  from #alternate2 as a
+  left join [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo] as b
+ on a.customercode=b.CustomerCode and a.alternate=b.AlternateKey
+  
+  select * from #joinup2
+  where billstore is null
+  
+    update [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+set JoinDate_Updated= b.minbill
+from [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo] as a
+inner join #tempdate as b
+on a.CustomerCode=b.CustomerCode
+
+select customercode,min(billdate) minbill ,MIN(joindate_updated) minupdate
+---into #tempdate
+from [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+group by customercode
+having MIN(billdate)>MIN(joindate_updated)
+
+select distinct customercode 
+from [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+where Joinlocation_Updated is null
+
+select * from [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+where CardNumber = '92005843'
+  
