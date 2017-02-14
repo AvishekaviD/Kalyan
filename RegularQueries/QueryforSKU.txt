@@ -1,0 +1,10 @@
+
+
+SELECT CustomerCode
+,STUFF((SELECT '; ' + US.[SubSectionName]+'; '+US.[DivisionCode]+'; '+US.[GroupName]+'; '+
+US.[MakeCategoryName]+'; '+US.[MakeName]+'; '+US.[SectionName]+'; '+US.[SubSectionName]
+    FROM [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo_20170119_bk_2] US
+    WHERE US.CustomerCode = SS.CustomerCode 
+    FOR XML PATH('')), 1, 1, '') [SECTORS/USERS]
+FROM #Temp2015a SS
+GROUP BY  SS.CustomerCode
