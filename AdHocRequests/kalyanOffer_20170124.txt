@@ -1,0 +1,307 @@
+  /****** Mumbai Market  ******/
+select Billdate,billstore,Revenue,sum(Counts) [No of Customers],SUM(netamount) as netamount from (
+
+select Billdate,billstore,
+case
+when Revenue <15000 then 'Less than 15000'
+when Revenue >=15000 and Revenue <=25000 then '15000 - 25000'
+when Revenue >25000 then 'Greater than 25000' end Revenue
+,count(distinct Customercode)Counts,SUM(Revenue) as netamount from (
+SELECT customercode,Billdate, Billstore, sum(Netamount) Revenue
+  FROM [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+  where Divisioncode in ('Gold','Diamond') and Billstore in ('VASHI','BORIVALLI','THANE','GHATKOPAR') and billdate between '2016-10-03 00:00:00' and '2016-10-29 00:00:00' and TransactionType <> 'SALES_RETURN'
+group by Billdate, Billstore,customercode) as a
+group by Billdate,billstore,Revenue) as b group by Billdate,billstore,Revenue
+order by 1
+
+
+/****** Bangalore Market  ******/
+select Billdate,billstore,Revenue,sum(Counts) [No of Customers],SUM(netamount) as netamount from (
+
+select Billdate,billstore,
+case
+when Revenue <15000 then 'Less than 15000'
+when Revenue >=15000 and Revenue <=25000 then '15000 - 25000'
+when Revenue >25000 then 'Greater than 25000' end Revenue
+,count(distinct Customercode)Counts,SUM(Revenue) as netamount from (
+SELECT customercode,Billdate, Billstore, sum(Netamount) Revenue
+  FROM [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+  where Billstore in ('JAYANAGAR',
+'KORAMANGALA',
+'BANGALORE') and billdate between '2016-09-30 00:00:00' and '2016-10-28 00:00:00' and TransactionType <> 'SALES_RETURN'
+group by Billdate, Billstore,customercode) as a
+group by Billdate,billstore,Revenue) as b group by Billdate,billstore,Revenue
+order by 1
+
+/****** Delhi Market  ******/
+select Billdate,billstore,Revenue,sum(Counts) [No of Customers],SUM(netamount) as netamount from (
+
+select Billdate,billstore,
+case
+when Revenue <15000 then 'Less than 15000'
+when Revenue >=15000 and Revenue <=25000 then '15000 - 25000'
+when Revenue >25000 then 'Greater than 25000' end Revenue
+,count(distinct Customercode)Counts,SUM(Revenue) as netamount from (
+SELECT customercode,Billdate, Billstore, sum(Netamount) Revenue
+  FROM [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+  where Billstore in ('PITAMPURA',
+'KAROL BAGH',
+'DEFENCE COLONY','Noida','Gurgaon') and billdate between '2016-10-03 00:00:00' and '2016-10-29 00:00:00' and TransactionType <> 'SALES_RETURN'
+group by Billdate, Billstore,customercode) as a
+group by Billdate,billstore,Revenue) as b group by Billdate,billstore,Revenue
+order by 1
+
+/****** Chennai Market  ******/
+select Billdate,billstore,Revenue,sum(Counts) [No of Customers],SUM(netamount) as netamount from (
+
+select Billdate,billstore,
+case
+when Revenue <15000 then 'Less than 15000'
+when Revenue >=15000 and Revenue <=25000 then '15000 - 25000'
+when Revenue >25000 then 'Greater than 25000' end Revenue
+,count(distinct Customercode)Counts,SUM(Revenue) as netamount from (
+SELECT customercode,Billdate, Billstore, sum(Netamount) Revenue
+  FROM [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+  where Billstore in ('ADYAR',
+'ANNA NAGAR',
+'CHROMPET',
+'CHENNAI',
+'VELACHERY') and billdate between '2016-10-07 00:00:00' and '2016-10-29 00:00:00' and TransactionType <> 'SALES_RETURN'
+group by Billdate, Billstore,customercode) as a
+group by Billdate,billstore,Revenue) as b group by Billdate,billstore,Revenue
+order by 1
+
+/****** Hyderabad Market  ******/
+select Billdate,billstore,Revenue,sum(Counts) [No of Customers],SUM(netamount) as netamount from (
+
+select Billdate,billstore,
+case
+when Revenue <15000 then 'Less than 15000'
+when Revenue >=15000 and Revenue <=25000 then '15000 - 25000'
+when Revenue >25000 then 'Greater than 25000' end Revenue
+,count(distinct Customercode)Counts,SUM(Revenue) as netamount from (
+SELECT customercode,Billdate, Billstore, sum(Netamount) Revenue
+  FROM [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+  where Billstore in ('Hyderabad') and billdate between '2016-10-08 00:00:00' and '2016-10-28 00:00:00' and TransactionType <> 'SALES_RETURN'
+group by Billdate, Billstore,customercode) as a
+group by Billdate,billstore,Revenue) as b group by Billdate,billstore,Revenue
+order by 1
+
+/****** Kolkata Market  ******/
+select Billdate,billstore,Revenue,sum(Counts) [No of Customers],SUM(netamount) as netamount from (
+
+select Billdate,billstore,
+case
+when Revenue <15000 then 'Less than 15000'
+when Revenue >=15000 and Revenue <=25000 then '15000 - 25000'
+when Revenue >25000 then 'Greater than 25000' end Revenue
+,count(distinct Customercode)Counts,SUM(Revenue) as netamount from (
+SELECT customercode,Billdate, Billstore, sum(Netamount) Revenue
+  FROM [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+  where Billstore in ('Salt Lake',
+'Gariahat',
+'Camac Street') and billdate between '2016-09-25 00:00:00' and '2016-10-29 00:00:00' and TransactionType <> 'SALES_RETURN'
+group by Billdate, Billstore,customercode) as a
+group by Billdate,billstore,Revenue) as b group by Billdate,billstore,Revenue
+order by 1
+
+/****** Bhubaneshwar Market  ******/
+select Billdate,billstore,Revenue,sum(Counts) [No of Customers],SUM(netamount) as netamount from (
+
+select Billdate,billstore,
+case
+when Revenue <15000 then 'Less than 15000'
+when Revenue >=15000 and Revenue <=25000 then '15000 - 25000'
+when Revenue >25000 then 'Greater than 25000' end Revenue
+,count(distinct Customercode)Counts,SUM(Revenue) as netamount from (
+SELECT customercode,Billdate, Billstore, sum(Netamount) Revenue
+  FROM [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+  where Billstore in ('BHUBANESHWAR') and billdate between '2016-10-03 00:00:00' and '2016-10-29 00:00:00' and TransactionType <> 'SALES_RETURN'
+group by Billdate, Billstore,customercode) as a
+group by Billdate,billstore,Revenue) as b group by Billdate,billstore,Revenue
+order by 1
+
+/****** Karnataka Market  ******/
+select Billdate,billstore,Revenue,sum(Counts) [No of Customers],SUM(netamount) as netamount from (
+
+select Billdate,billstore,
+case
+when Revenue <15000 then 'Less than 15000'
+when Revenue >=15000 and Revenue <=25000 then '15000 - 25000'
+when Revenue >25000 then 'Greater than 25000' end Revenue
+,count(distinct Customercode)Counts,SUM(Revenue) as netamount from (
+SELECT customercode,Billdate, Billstore, sum(Netamount) Revenue
+  FROM [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+  where Billstore in ('MYSORE',
+'MANGALORE',
+'BELGAUM',
+'HUBLI') and billdate between '2016-09-30 00:00:00' and '2016-10-31 00:00:00' and TransactionType <> 'SALES_RETURN'
+group by Billdate, Billstore,customercode) as a
+group by Billdate,billstore,Revenue) as b group by Billdate,billstore,Revenue
+order by 1
+
+/****** Punjab Market  ******/
+select Billdate,billstore,Revenue,sum(Counts) [No of Customers],SUM(netamount) as netamount from (
+
+select Billdate,billstore,
+case
+when Revenue <15000 then 'Less than 15000'
+when Revenue >=15000 and Revenue <=25000 then '15000 - 25000'
+when Revenue >25000 then 'Greater than 25000' end Revenue
+,count(distinct Customercode)Counts,SUM(Revenue) as netamount from (
+SELECT customercode,Billdate, Billstore, sum(Netamount) Revenue
+  FROM [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+  where Billstore in ('MOHALI',
+'AMRITSAR',
+'LUDHIANA',
+'JALANDHAR'
+) and billdate between '2016-10-03 00:00:00' and '2016-10-29 00:00:00' and TransactionType <> 'SALES_RETURN'
+group by Billdate, Billstore,customercode) as a
+group by Billdate,billstore,Revenue) as b group by Billdate,billstore,Revenue
+order by 1
+
+
+/****** Rajasthan Market  ******/
+select Billdate,billstore,Revenue,sum(Counts) [No of Customers],SUM(netamount) as netamount from (
+
+select Billdate,billstore,
+case
+when Revenue <15000 then 'Less than 15000'
+when Revenue >=15000 and Revenue <=25000 then '15000 - 25000'
+when Revenue >25000 then 'Greater than 25000' end Revenue
+,count(distinct Customercode)Counts,SUM(Revenue) as netamount from (
+SELECT customercode,Billdate, Billstore, sum(Netamount) Revenue
+  FROM [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+  where Billstore in ('Jaipur',
+'Jodhpur',
+'Udaipur') and billdate between '2016-10-03 00:00:00' and '2016-10-29 00:00:00' and TransactionType <> 'SALES_RETURN'
+group by Billdate, Billstore,customercode) as a
+group by Billdate,billstore,Revenue) as b group by Billdate,billstore,Revenue
+order by 1
+
+/****** Gujarat Market  ******/
+select Billdate,billstore,Revenue,sum(Counts) [No of Customers],SUM(netamount) as netamount from (
+
+select Billdate,billstore,
+case
+when Revenue <15000 then 'Less than 15000'
+when Revenue >=15000 and Revenue <=25000 then '15000 - 25000'
+when Revenue >25000 then 'Greater than 25000' end Revenue
+,count(distinct Customercode)Counts,SUM(Revenue) as netamount from (
+SELECT customercode,Billdate, Billstore, sum(Netamount) Revenue
+  FROM [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+  where Billstore in ('AHMEDABAD',
+'BARODA',
+'RAJKOT',
+'SURAT') and billdate between '2016-10-03 00:00:00' and '2016-10-29 00:00:00' and TransactionType <> 'SALES_RETURN'
+group by Billdate, Billstore,customercode) as a
+group by Billdate,billstore,Revenue) as b group by Billdate,billstore,Revenue
+order by 1
+
+/****** Pune Market  ******/
+select Billdate,billstore,Revenue,sum(Counts) [No of Customers],SUM(netamount) as netamount from (
+
+select Billdate,billstore,
+case
+when Revenue <15000 then 'Less than 15000'
+when Revenue >=15000 and Revenue <=25000 then '15000 - 25000'
+when Revenue >25000 then 'Greater than 25000' end Revenue
+,count(distinct Customercode)Counts,SUM(Revenue) as netamount from (
+SELECT customercode,Billdate, Billstore, sum(Netamount) Revenue
+  FROM [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+  where Billstore in ('PUNE',
+'HADAPSAR') and billdate between '2016-10-03 00:00:00' and '2016-10-29 00:00:00' and TransactionType <> 'SALES_RETURN'
+group by Billdate, Billstore,customercode) as a
+group by Billdate,billstore,Revenue) as b group by Billdate,billstore,Revenue
+order by 1
+
+
+/****** Tamil Nadu Market  ******/
+select Billdate,billstore,Revenue,sum(Counts) [No of Customers],SUM(netamount) as netamount from (
+
+select Billdate,billstore,
+case
+when Revenue <15000 then 'Less than 15000'
+when Revenue >=15000 and Revenue <=25000 then '15000 - 25000'
+when Revenue >25000 then 'Greater than 25000' end Revenue
+,count(distinct Customercode)Counts,SUM(Revenue) as netamount from (
+SELECT customercode,Billdate, Billstore, sum(Netamount) Revenue
+  FROM [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+  where Billstore in ('COIMBATORE',
+'ERODE',
+'TUTICORIN',
+'MADURAI',
+'SALEM',
+'KARUR',
+'TRICHY',
+'VELLORE',
+'PONDICHERY',
+'KUMBAKONNAM',
+'THIRUVANNAMALAI',
+'THIRUNELVELI',
+'THANJAVUR',
+'RAMANATHAPURAM',
+'KANCHEEPURAM'
+) and billdate between '2016-08-15 00:00:00' and '2016-09-15 00:00:00' and TransactionType <> 'SALES_RETURN'
+group by Billdate, Billstore,customercode) as a
+group by Billdate,billstore,Revenue) as b group by Billdate,billstore,Revenue
+order by 1
+
+/****** Kerala Market  ******/
+select Billdate,billstore,Revenue,sum(Counts) [No of Customers],SUM(netamount) as netamount from (
+
+select Billdate,billstore,
+case
+when Revenue <15000 then 'Less than 15000'
+when Revenue >=15000 and Revenue <=25000 then '15000 - 25000'
+when Revenue >25000 then 'Greater than 25000' end Revenue
+,count(distinct Customercode)Counts,SUM(Revenue) as netamount from (
+SELECT customercode,Billdate, Billstore, sum(Netamount) Revenue
+  FROM [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+  where Billstore in ('THRISSUR DEEPANJALI',
+'PALAKKAD',
+'PERINTHALMANNA',
+'THRISSUR ROUND',
+'KOLLAM',
+'CALICUT',
+'TRIVANDRUM',
+'KOTTAYAM',
+'KANNUR',
+'ERNAKULAM',
+'THIRUVALLA',
+'ADOOR',
+'ALAPPUZHA',
+'ANGAMALLY',
+'ATTINGAL',
+'THODUPUZHA',
+'KODUNGALLUR'
+) and billdate between '2016-08-13 00:00:00' and '2016-09-15 00:00:00' and TransactionType <> 'SALES_RETURN'
+group by Billdate, Billstore,customercode) as a
+group by Billdate,billstore,Revenue) as b group by Billdate,billstore,Revenue
+order by 1
+
+/****** AP & Telangana Market  ******/
+select Billdate,billstore,Revenue,sum(Counts) [No of Customers],SUM(netamount) as netamount from (
+
+select Billdate,billstore,
+case
+when Revenue <15000 then 'Less than 15000'
+when Revenue >=15000 and Revenue <=25000 then '15000 - 25000'
+when Revenue >25000 then 'Greater than 25000' end Revenue
+,count(distinct Customercode)Counts,SUM(Revenue) as netamount from (
+SELECT customercode,Billdate, Billstore, sum(Netamount) Revenue
+  FROM [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+  where Billstore in ('VIJAYAWADA',
+'GUNTUR',
+'THIRUPATI',
+'NELLORE',
+'KURNOOL',
+'KADAPA',
+'KUKKATPALLI',
+'WARANGAL',
+'KAKINADA',
+'VISAKHAPATNAM'
+) and billdate between '2016-08-15 00:00:00' and '2016-09-16 00:00:00' and TransactionType <> 'SALES_RETURN'
+group by Billdate, Billstore,customercode) as a
+group by Billdate,billstore,Revenue) as b group by Billdate,billstore,Revenue
+order by 1
