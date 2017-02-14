@@ -1,0 +1,120 @@
+  select * 
+    into #temp
+  from [Kalyan_Master].[dbo].[tbl_Master_Capillary_JuelTransInfo]
+  where BillDate in ('2016-05-09 00:00:00','2015-04-21 00:00:00',
+  '2016-10-28 00:00:00','2015-11-09 00:00:00')
+  
+  
+  select top 1000 * from #temp
+  
+  select COUNT(*) from #temp
+  
+  select customercode,[CustomerName],billstore,divisioncode,[MobileNumberHash],
+  SUM(CAST(netamount as float)) netamount
+  into #repeat
+  from #temp
+  where [TransactionType]<>'SALES_RETURN' and customercode in (
+  select distinct customercode from [Kalyan_Temp].[dbo].[temp_sp_repeatcustomer])
+  group by customercode,[CustomerName],billstore,divisioncode,[MobileNumberHash]
+  order by customercode
+  
+  
+  select customercode,count(distinct [MobileNumberHash])
+  from #temp
+  where billdate in ('2016-10-28 00:00:00','2015-11-09 00:00:00')
+  group by customercode
+  having COUNT(distinct [MobileNumberHash])>1
+ 
+  
+  select customercode,count(distinct customername)
+  from #temp
+  where billdate in ( '2016-05-09 00:00:00','2015-04-21 00:00:00')
+  group by customercode
+  having COUNT(distinct customername)>1
+  
+  drop table #tri1
+  
+  select distinct a.*,b.MobileNumber
+  into #repeat1
+  from #repeat as a
+  left join [Kalyan_PIIHash].[dbo].[tbl_Hashedvalue_MobileNumber] as b
+  on a.mobilenumberhash=b.HashedValue
+  
+  
+  select * from #repeat1
+  
+  select distinct customercode from #temp
+  where billdate = '2016-10-28 00:00:00' and billdate = '2015-11-09 00:00:00'
+  
+  
+  select distinct customercode from #tri1
+  where customercode in (select customercode from #dhan1)
+  
+  
+  select * 
+  into #a1
+  from #temp
+  where billdate = '2015-04-21 00:00:00'
+  
+  select * 
+  into #a2
+  from #temp
+  where billdate = '2016-05-09 00:00:00'
+  
+  select * 
+  into #d1
+  from #temp
+  where billdate = '2015-11-09 00:00:00'
+  
+  select * 
+  into #d2
+  from #temp
+  where billdate = '2016-10-28 00:00:00'
+  
+  
+  select * 
+  into #a1d1
+  from #a1
+  where customercode in (select customercode from #d1)
+  
+  
+    select * 
+  into #a2d2
+  from #a2
+  where customercode in (select customercode from #d2)
+  
+    select * 
+  into #a1a2
+  from #a1
+  where customercode in (select customercode from #a2)
+  
+    
+    select * 
+  into #d1d2
+  from #d1
+  where customercode in (select customercode from #d2)
+  
+    
+    select * 
+  into #a1d2
+  from #a1
+  where customercode in (select customercode from #d2)
+  
+    
+    select * 
+  into #a2d1
+  from #a2
+  where customercode in (select customercode from #d1)
+  
+  
+  
+  select customercode,[CustomerName],billstore,divisioncode,[MobileNumberHash],
+  SUM(CAST(netamount as float)) netamount
+  --into #repeat
+  from #temp
+  where [TransactionType]<>'SALES_RETURN' and customercode in (
+  select distinct customercode from #a2d1)
+  and billdate in ('2016-05-09 00:00:00', '2015-11-09 00:00:00')
+  group by customercode,[CustomerName],billstore,divisioncode,[MobileNumberHash]
+  order by customercode
+  

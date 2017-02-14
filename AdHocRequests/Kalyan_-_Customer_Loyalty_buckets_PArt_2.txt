@@ -1,0 +1,186 @@
+Add customers to table Deluxe_customers 
+
+select * into Deluxe_Customers FROM 
+(
+
+SELECT distinct(customercode)
+  FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+  where  Netamount between '100000' and '200000' and divisioncode = 'Gold' and sectionname not in ('COIN','LOCKET - COIN')
+  and TransactionType not in ('Sales_Return')
+
+  union
+
+  SELECT distinct customercode
+  FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+  where   Netamount <= 25000  and divisioncode = 'Diamond' 
+  and GroupName not in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS')and sectionname not in ('COIN','LOCKET - COIN')
+  and TransactionType not in ('Sales_Return')
+  
+  union
+
+  
+SELECT distinct customercode
+  FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+  where  Netamount <= 50000  and divisioncode = 'Diamond' 
+  and GroupName in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS')
+  and sectionname not in ('COIN','LOCKET - COIN')
+  and TransactionType not in ('Sales_Return')
+
+  union
+
+  select distinct customercode [NoofCustomers] from (
+SELECT customercode,count(distinct [BillDate]) [FrequencyofVisit]
+FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+where customercode is not null
+group by customercode) as a where  [FrequencyofVisit] in (3,4) ) as a
+------------------------------------------------------------------------------------------------------------------
+Add customers to table Premium_customers 
+
+select * into Premium_Customers FROM 
+(
+
+SELECT distinct customercode
+  FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+  where  Netamount between '200001' and '500000' and divisioncode = 'Gold' and sectionname not in ('COIN','LOCKET - COIN')
+  and TransactionType not in ('Sales_Return')
+
+  union
+
+SELECT distinct customercode
+  FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+  where  Netamount between '75001' and '150000'  and divisioncode = 'Diamond' 
+  and GroupName not in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS')and sectionname not in ('COIN','LOCKET - COIN')
+
+  and TransactionType not in ('Sales_Return')
+  
+  union
+
+SELECT distinct customercode
+  FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+  where  Netamount between '50001' and '150000'  and divisioncode = 'Diamond' 
+  and GroupName in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS') and sectionname not in ('COIN','LOCKET - COIN')
+
+  and TransactionType not in ('Sales_Return')
+
+  union
+
+select distinct customercode [NoofCustomers] from (
+SELECT customercode,count(distinct [BillDate]) [FrequencyofVisit]
+FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+where customercode is not null
+group by customercode) as a where  [FrequencyofVisit] > 4 ) as a
+------------------------------------------------------------------------------------------------------------------
+
+Add customers to table Kalyanclub_customers 
+
+
+select * into KalyanClub_Customers FROM 
+(
+
+SELECT distinct customercode
+  FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+  where  Netweight > 80  and divisioncode = 'Gold' and sectionname not in ('COIN','LOCKET - COIN')
+  and makename in ('MUDHRA','NIMAH','SANKALP')
+
+  and TransactionType not in ('Sales_Return')
+  union
+
+SELECT distinct customercode
+  FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+  where  Netamount between '75001' and '150000'  and divisioncode = 'Diamond' 
+  and GroupName not in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS')and sectionname not in ('COIN','LOCKET - COIN')
+
+  and TransactionType not in ('Sales_Return')
+
+  
+  union
+
+SELECT distinct customercode
+  FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+  where  Netamount between '150001' and '300000'  and divisioncode = 'Diamond' 
+  and GroupName in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS') and sectionname not in ('COIN','LOCKET - COIN')
+
+  and TransactionType not in ('Sales_Return')
+
+  ) as a
+------------------------------------------------------------------------------------------------------------------
+
+select * into Basic_Customers FROM 
+
+(
+
+select distinct(customercode)
+FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+where customercode is not null and sectionname in ('COIN','LOCKET - COIN') or divisioncode = 'Silver'
+and TransactionType not in ('Sales_Return')
+  
+union
+
+select distinct customercode [NoofCustomers] from (
+SELECT customercode,count(distinct [BillDate]) [FrequencyofVisit]
+FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+where customercode is not null
+group by customercode) as a where  [FrequencyofVisit] <=2 
+) as a
+------------------------------------------------------------------------------------------------------------------
+
+select * into HighestBucket_Customers FROM 
+
+( SELECT distinct customercode
+  FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+  where  Netamount > 500000 and divisioncode = 'Gold' and sectionname not in ('COIN','LOCKET - COIN')
+  and TransactionType not in ('Sales_Return')
+
+union 
+
+SELECT distinct customercode
+  FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+  where  Netamount >= 150000 and divisioncode = 'Diamond' and sectionname not in ('COIN','LOCKET - COIN')
+  and TransactionType not in ('Sales_Return')
+ 
+ union
+ 
+ SELECT distinct customercode
+  FROM [Kalyan_Sales].[dbo].[Capillary_JuelTransInfo]
+  where  Netamount > 300000 and divisioncode = 'Diamond' 
+  and GroupName in ('UNCUT DIAMOND ORNAMENTS','UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS','OLD UNCUT DIAMOND WITH COLOUR STONE ORNAMENTS') and sectionname not in ('COIN','LOCKET - COIN')
+
+  and TransactionType not in ('Sales_Return') ) as a
+------------------------------------------------------------------------------------------------------------------
+
+Queries for Store scorcard
+
+  
+  droptable #scoreRFM1
+  
+  select [JoinLocationState],[JoinLocation],avg([RecencyQuintiles])as R
+  ,avg([FrequencyQuintiles]) as F
+  ,avg([MonetaryQuintiles])as M
+  ,avg([RFM_Final_SCORE])as RFM
+  ,count([CustomerCode])as customer
+ into #scoreRFM
+ from [Kalyan_Sales].[dbo].[temp_20160629_CustomerCodeJoinedFromApr14]
+ where Joindate between '2014-04-01' and '2015-12-31' 
+
+ group by [JoinLocation],[JoinLocationState]
+ order by [JoinLocation]
+
+ select * from #scoreRFM
+
+ 
+ drop table #scoremela
+
+  select [JoinLocationState],[JoinLocation],sum([MobileScore])as mobile
+  ,sum([EmailScore]) as email
+  ,sum([ResidencePhoneScore])as phone
+  ,sum([AddressScore])as address
+  ,avg([MelaScore]) as melascore
+  ,count([CustomerCode])as customer
+ into #scoremela
+ from [Kalyan_Sales].[dbo].[temp_20160629_CustomerCodeJoinedFromApr14]
+  where Joindate between '2014-04-01' and '2016-06-30' 
+
+ group by [JoinLocation],[JoinLocationState]
+ order by [JoinLocation]
+
+  select * from #scoremela
